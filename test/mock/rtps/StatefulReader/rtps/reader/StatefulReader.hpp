@@ -19,9 +19,12 @@
 #ifndef RTPS_READER__STATEFULREADER_HPP
 #define RTPS_READER__STATEFULREADER_HPP
 
+#include <list>
+
 #include <fastdds/rtps/attributes/ReaderAttributes.h>
 #include <fastdds/rtps/common/Guid.h>
 #include <fastdds/rtps/reader/RTPSReader.h>
+#include <fastdds/rtps/network/NetworkBuffer.hpp>
 #include <rtps/resources/ResourceEvent.h>
 
 namespace eprosima {
