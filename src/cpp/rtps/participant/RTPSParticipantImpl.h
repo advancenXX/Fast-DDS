@@ -275,7 +275,7 @@ public:
 
     /**
      * Send a message to several locations
-     * @param buffers List of buffers to send.
+     * @param buffers Vector of buffers to send.
      * @param total_bytes Total number of bytes to send.
      * @param sender_guid GUID of the producer of the message.
      * @param destination_locators_begin Iterator at the first destination locator.
@@ -285,7 +285,7 @@ public:
      */
     template<class LocatorIteratorT>
     bool sendSync(
-            const std::list<eprosima::fastdds::rtps::NetworkBuffer>& buffers,
+            const std::vector<eprosima::fastdds::rtps::NetworkBuffer>& buffers,
             const uint32_t& total_bytes,
             const GUID_t& sender_guid,
             const LocatorIteratorT& destination_locators_begin,

@@ -193,7 +193,7 @@ LocatorList test_UDPv4Transport::NormalizeLocator(
 }
 
 bool test_UDPv4Transport::send(
-        const std::list<NetworkBuffer>& buffers,
+        const std::vector<NetworkBuffer>& buffers,
         uint32_t total_bytes,
         eProsimaUDPSocket& socket,
         fastrtps::rtps::LocatorsIterator* destination_locators_begin,
@@ -239,7 +239,7 @@ bool test_UDPv4Transport::send(
 }
 
 bool test_UDPv4Transport::send(
-        const std::list<NetworkBuffer>& buffers,
+        const std::vector<NetworkBuffer>& buffers,
         uint32_t total_bytes,
         eProsimaUDPSocket& socket,
         const Locator& remote_locator,
@@ -312,7 +312,7 @@ bool test_UDPv4Transport::should_drop_locator(
 }
 
 bool test_UDPv4Transport::packet_should_drop(
-        const std::list<NetworkBuffer>& buffers,
+        const std::vector<NetworkBuffer>& buffers,
         uint32_t total_bytes)
 {
     if (test_UDPv4Transport_ShutdownAllNetwork)
@@ -493,7 +493,7 @@ bool test_UDPv4Transport::packet_should_drop(
 }
 
 bool test_UDPv4Transport::log_drop(
-        const std::list<NetworkBuffer>& buffers,
+        const std::vector<NetworkBuffer>& buffers,
         uint32_t size)
 {
     static_cast<void>(size);
