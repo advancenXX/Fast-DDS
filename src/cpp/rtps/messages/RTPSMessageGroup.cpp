@@ -144,12 +144,12 @@ bool RTPSMessageGroup::append_submessage()
     if (nullptr != pending_buffer_.buffer)
     {
         // Add pending buffer & padding to buffers_to_send_
-        buffers_to_send_.emplace_back(pending_buffer_);
+        buffers_to_send_->emplace_back(pending_buffer_);
         buffers_bytes_ += pending_buffer_.size;
         pending_buffer_ = NetworkBuffer();
         if (pending_padding_ > 0)
         {
-            buffers_to_send_.emplace_back(padding_, pending_padding_);
+            buffers_to_send_->emplace_back(padding_, pending_padding_);
             buffers_bytes_ += pending_padding_;
             pending_padding_ = 0;
         }
@@ -271,6 +271,7 @@ RTPSMessageGroup::RTPSMessageGroup(
 
     header_msg_ = &(send_buffer_->rtpsmsg_fullmsg_);
     submessage_msg_ = &(send_buffer_->rtpsmsg_submessage_);
+    buffers_to_send_ = &(send_buffer_->buffers_);
 
     // Init RTPS message.
     reset_to_header();
@@ -327,7 +328,7 @@ void RTPSMessageGroup::reset_to_header()
     header_msg_->pos = RTPSMESSAGE_HEADER_SIZE;
     header_msg_->length = RTPSMESSAGE_HEADER_SIZE;
 
-    buffers_to_send_.clear();
+    buffers_to_send_->clear();
     buffers_bytes_ = 0;
 }
 
@@ -366,7 +367,7 @@ void RTPSMessageGroup::send()
                 }
 
                 msgToSend = encrypt_msg_;
-                buffers_to_send_.emplace_back(msgToSend->buffer, msgToSend->length);
+                buffers_to_send_->emplace_back(msgToSend->buffer, msgToSend->length);
                 buffers_bytes_ += msgToSend->length;
             }
 #endif // if HAVE_SECURITY
@@ -375,7 +376,7 @@ void RTPSMessageGroup::send()
             add_stats_submsg();
 #endif // FASTDDS_STATISTICS
 
-            if (!sender_->send(buffers_to_send_,
+            if (!sender_->send(*buffers_to_send_,
                     buffers_bytes_,
                     max_blocking_time_point_))
             {
