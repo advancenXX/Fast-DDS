@@ -551,7 +551,7 @@ bool RTPSMessageGroup::add_data(
     // Check limitation
     uint32_t data_size = change.serializedPayload.length;
     if (data_exceeds_limitation(data_size, sent_bytes_limitation_, current_sent_bytes_,
-            header_msg_->length + buffers_bytes_))
+            buffers_bytes_))
     {
         flush_and_reset();
         throw limit_exceeded();
@@ -660,7 +660,7 @@ bool RTPSMessageGroup::add_data_frag(
             change.serializedPayload.length - fragment_start;
     // Check limitation
     if (data_exceeds_limitation(fragment_size, sent_bytes_limitation_, current_sent_bytes_,
-            header_msg_->length + buffers_bytes_))
+            buffers_bytes_))
     {
         flush_and_reset();
         throw limit_exceeded();
@@ -914,10 +914,7 @@ bool RTPSMessageGroup::create_gap_submessage(
 void RTPSMessageGroup::add_stats_submsg()
 {
     // Use empty space of header_msg_ buffer to create the msg
-    uint32_t header_pos = header_msg_->pos;
-    uint32_t header_length = header_msg_->length;
-    uint32_t stats_pos = header_msg_->max_size - eprosima::fastdds::statistics::rtps::statistics_submessage_length;
-    header_msg_->pos = stats_pos;
+    uint32_t stats_pos = header_msg_->pos;
 
     eprosima::fastdds::statistics::rtps::add_statistics_submessage(header_msg_);
 
@@ -925,10 +922,6 @@ void RTPSMessageGroup::add_stats_submsg()
     buffers_to_send_->emplace_back(&header_msg_->buffer[stats_pos],
             eprosima::fastdds::statistics::rtps::statistics_submessage_length);
     buffers_bytes_ += eprosima::fastdds::statistics::rtps::statistics_submessage_length;
-
-    // Restore position
-    header_msg_->pos = header_pos;
-    header_msg_->length = header_length;
 }
 
 #endif // FASTDDS_STATISTICS
